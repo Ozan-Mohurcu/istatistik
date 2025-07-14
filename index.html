@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstatistik Öğrenme Platformu</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> İstatistik Öğrenme Platformu</h1>
+                <p>Görselleştirme ve analiz ile istatistik öğrenin</p>
+            </div>
+            <div class="author-info">
+                <span>Ozan M. tarafından geliştirilmiştir</span>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/ozanmhrc/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/Ozan-Mohurcu" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <div class="visitor-counter">
+                    <i class="fas fa-eye"></i>
+                    <span id="visitorCount">0</span> ziyaretçi
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Sidebar -->
+            <aside class="left-sidebar">
+                <!-- Concept Boxes -->
+                <div class="concept-section">
+                    <div class="concept-box info">
+                        <h4><i class="fas fa-lightbulb"></i> İstatistik Nedir?</h4>
+                        <p>İstatistik, veri toplama, analiz etme, yorumlama ve sunma bilimidir. Günlük hayatta karar verme süreçlerinden bilimsel araştırmalara kadar her alanda kullanılır.</p>
+                    </div>
+
+                    <div class="concept-box primary">
+                        <h4><i class="fas fa-calculator"></i> Temel Kavramlar</h4>
+                        <div class="concept-list">
+                            <div class="concept-item">
+                                <strong>Ortalama:</strong> Tüm değerlerin toplamının sayıya bölümü
+                            </div>
+                            <div class="concept-item">
+                                <strong>Medyan:</strong> Sıralı verilerin ortasındaki değer
+                            </div>
+                            <div class="concept-item">
+                                <strong>Mod:</strong> En çok tekrarlanan değer
+                            </div>
+                            <div class="concept-item">
+                                <strong>Standart Sapma:</strong> Verilerin ortalamadan ne kadar uzak olduğunu gösterir
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-box success">
+                        <h4><i class="fas fa-info-circle"></i> Nasıl Kullanılır?</h4>
+                        <ol class="usage-steps">
+                            <li>Veri türünü seçin</li>
+                            <li>Grafik türünü seçin</li>
+                            <li>"Veri Oluştur" butonuna tıklayın</li>
+                            <li>Sonuçları analiz edin</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-section">
+                    <h3><i class="fas fa-sliders-h"></i> Kontroller</h3>
+                    
+                    <div class="control-group">
+                        <label for="dataType">Veri Türü:</label>
+                        <select id="dataType" class="form-select">
+                            <option value="normal">Normal Dağılım</option>
+                            <option value="skewed">Çarpık Dağılım</option>
+                            <option value="uniform">Düzgün Dağılım</option>
+                            <option value="categorical">Kategorik Veri</option>
+                            <option value="bivariate">İki Değişkenli</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="chartType">Grafik Türü:</label>
+                        <select id="chartType" class="form-select">
+                            <option value="histogram">Histogram</option>
+                            <option value="boxplot">Box Plot (Kutu Grafiği)</option>
+                            <option value="scatter">Scatter Plot (Saçılım)</option>
+                            <option value="bar">Bar Chart (Çubuk)</option>
+                            <option value="pie">Pie Chart (Pasta)</option>
+                            <option value="line">Line Chart (Çizgi)</option>
+                        </select>
+                    </div>
+
+                    <button id="generateBtn" class="generate-btn">
+                        <i class="fas fa-sync-alt"></i> Veri Oluştur
+                    </button>
+                </div>
+
+                <!-- Data Table -->
+                <div class="data-preview">
+                    <h4><i class="fas fa-table"></i> Veri Özeti</h4>
+                    <div id="dataTable" class="data-table-container">
+                        <p class="placeholder-text">Grafik oluşturmak için "Veri Oluştur" butonuna tıklayın.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Chart Area -->
+            <main class="chart-area">
+                <div class="chart-header">
+                    <h2 id="chartTitle">Grafik Alanı</h2>
+                    <div class="chart-actions">
+                        <button id="refreshBtn" class="action-btn">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button id="downloadBtn" class="action-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div id="loading" class="loading">
+                        <div class="spinner"></div>
+                        <p>Grafik oluşturuluyor...</p>
+                    </div>
+                    <canvas id="mainChart"></canvas>
+                </div>
+
+                <!-- Statistics Panel -->
+                <div class="stats-panel">
+                    <div id="statsContent" class="stats-content">
+                        <p class="placeholder-text">Grafik oluşturmak için sol paneldeki ayarları yapın ve "Veri Oluştur" butonuna tıklayın.</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <!-- Interpretation -->
+                <div class="interpretation-section">
+                    <h3><i class="fas fa-search"></i> Grafik Yorumu</h3>
+                    <div id="interpretation" class="interpretation-content">
+                        <p class="placeholder-text">Grafik oluşturulduktan sonra burada detaylı yorumlar görüntülenecektir.</p>
+                    </div>
+                </div>
+
+                <!-- Warning Box -->
+                <div class="concept-box warning">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Dikkat Edilmesi Gerekenler</h4>
+                    <div class="warning-list">
+                        <div class="warning-item">
+                            <strong>Outlier (Aykırı Değer):</strong> Diğer verilerden çok farklı olan değerler
+                        </div>
+                        <div class="warning-item">
+                            <strong>Çarpıklık:</strong> Dağılımın simetrik olmaması
+                        </div>
+                        <div class="warning-item">
+                            <strong>Korelasyon:</strong> İki değişken arasındaki ilişki
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Cleaning -->
+                <div class="concept-box secondary">
+                    <h4><i class="fas fa-tools"></i> Veri Temizleme</h4>
+                    <div class="cleaning-methods">
+                        <div class="method-item">
+                            <strong>Outlier Tespiti:</strong> Z-score > 3 veya IQR yöntemi
+                        </div>
+                        <div class="method-item">
+                            <strong>Eksik Veri:</strong> Ortalama, medyan veya tahmin ile doldurma
+                        </div>
+                        <div class="method-item">
+                            <strong>Normalizasyon:</strong> Verileri aynı ölçeğe getirme
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Tips -->
+                <div class="concept-box success">
+                    <h4><i class="fas fa-graduation-cap"></i> Öğrenme İpuçları</h4>
+                    <ul class="tips-list">
+                        <li>Farklı veri türlerini deneyin</li>
+                        <li>Grafik türlerini karşılaştırın</li>
+                        <li>İstatistiksel değerleri analiz edin</li>
+                        <li>Yorumları dikkatlice okuyun</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
